@@ -33,6 +33,15 @@ export default function Orbital({still, focus = 0}: {still: boolean; focus?: num
     const nucleus = new THREE.IcosahedronGeometry(.83, 1);
     group.add(new THREE.LineSegments(new THREE.EdgesGeometry(nucleus), new THREE.LineBasicMaterial({color: 0xe2d5b8, transparent: true, opacity: .28})));
     nucleus.dispose();
+    const palette = [0x92cbd2,0xc7ac79,0xb5a1d0,0xd2c7ae,0x92b6a5];
+    const mineral = new THREE.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{time:{value:0},tint:{value:new THREE.Color(palette[selected.current])}},
+      vertexShader:`varying vec3 vN;varying vec3 vP;uniform float time;
+      void main(){vec3 p=position+normal*sin(position.y*12.+time*.6)*.016;vN=normalize(normalMatrix*normal);vec4 mv=modelViewMatrix*vec4(p,1.);vP=mv.xyz;gl_Position=projectionMatrix*mv;}`,
+      fragmentShader:`varying vec3 vN;varying vec3 vP;uniform vec3 tint;uniform float time;
+      void main(){float rim=pow(1.-max(0.,dot(normalize(vN),normalize(-vP))),2.4);
+      float strata=pow(.5+.5*sin(vP.y*65.+sin(vP.x*9.)+time*.3),18.);
+      gl_FragColor=vec4(tint*(rim*.85+strata*.16),rim*.46+strata*.09);}`});
+    const core=new THREE.Mesh(new THREE.SphereGeometry(1.04,48,32),mineral);group.add(core);
     const dots: number[] = [];
     for (let index = 0; index < 160; index++) {
       const angle = index * 2.39996, y = 1 - index / 80, radius = Math.sqrt(1 - y * y);
@@ -44,7 +53,12 @@ export default function Orbital({still, focus = 0}: {still: boolean; focus?: num
     const target = {x: 0, y: 0}, pointer = {x: 0, y: 0};
     const surface = element.parentElement!;
     const stop = () => {cancelAnimationFrame(frame); frame = 0; previousTime = 0;};
-    const paint = () => renderer.render(scene, camera);
+    const paint = () => {
+      mineral.uniforms.time.value=elapsed;
+      mineral.uniforms.tint.value.setHex(palette[selected.current]);
+      ringMaterial.color.setHex(palette[selected.current]);
+      renderer.render(scene, camera);
+    };
     const draw = (time: number) => {
       frame = 0;
       if (!visible || document.hidden || paused.current) return;
@@ -90,7 +104,7 @@ export default function Orbital({still, focus = 0}: {still: boolean; focus?: num
       document.removeEventListener('visibilitychange', sync);
       surface.removeEventListener('pointermove', move); surface.removeEventListener('pointerleave', leave);
       const geometries = new Set<THREE.BufferGeometry>(), materials = new Set<THREE.Material>();
-      scene.traverse(object => {if (object instanceof THREE.Line || object instanceof THREE.Points) {
+      scene.traverse(object => {if (object instanceof THREE.Line || object instanceof THREE.Points || object instanceof THREE.Mesh) {
         geometries.add(object.geometry);
         (Array.isArray(object.material) ? object.material : [object.material]).forEach(material => materials.add(material));
       }});

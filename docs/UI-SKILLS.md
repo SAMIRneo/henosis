@@ -31,3 +31,11 @@ Les tests utilisent Microsoft Edge en mode headless. `UI_BROWSER_CHANNEL` permet
 `node tools/check-motion.mjs` inspecte le changement de chambre au ralenti. Après un déploiement réussi, `node tools/verify-live.mjs` compare les fichiers publics au build local. Les fins de ligne sont normalisées uniquement pour HTML et SVG ; les bundles, polices et images sont comparés octet pour octet.
 
 Les tests automatisés ne remplacent pas une vérification avec un lecteur d'écran ni une campagne sur appareils physiques.
+
+## Matières et shaders
+
+Module ciblé utilisé : `npx ui-skills get cloudai-x/threejs-shaders`.
+Palette : charbon, ivoire, bronze, pétrole ; lumière cyan, bronze, améthyste, ivoire ou sauge selon le domaine. Aucun dégradé CSS décoratif.
+Le seuil utilise un ShaderMaterial GLSL : aperture gravée, lumière orbitale, grain fixe et réponse au pointeur. La traversée transforme la matière bronze en lumière froide.
+La constellation possède un noyau déplacé, des stries et une lumière de bord en espace caméra. Les deux surfaces limitent leur résolution à 1,5 DPR, cessent les RAF hors écran/en pause/onglet masqué et libèrent leurs ressources. Le mouvement réduit est prioritaire. Les images et les commandes restent fonctionnelles sans WebGL.
+Validation : build, 60 contrôles UI, cinq analyses axe, compilation GLSL sans erreur console et secours sans WebGL via `node tools/check-shaders.mjs`. Les captures montrent les états seuil, traversée et constellation. Contrôles exécutés sous Edge ; pas de mesure physique sur téléphone.

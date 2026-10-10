@@ -77,10 +77,10 @@ try{
   check(await page.evaluate(()=>window.__uiFrames)===pausedFrames,'Aucune boucle de rendu en pause');
   await page.getByRole('button',{name:'Animer la constellation'}).click();
   check(await page.evaluate(()=>window.__uiWebgl)===gl,'Aucune recréation WebGL lors de la pause');
-  await page.evaluate(()=>window.scrollTo({top:0,behavior:'instant'}));await page.waitForTimeout(250);
+  await page.locator('#fragments').evaluate(el=>el.scrollIntoView({behavior:'instant',block:'start'}));await page.waitForTimeout(250);
   const offscreen=await page.evaluate(()=>window.__uiFrames);await page.waitForTimeout(250);
   check(await page.evaluate(()=>window.__uiFrames)===offscreen,'Aucune boucle de rendu hors écran');
-  await page.getByRole('button',{name:'Suspendre le mouvement'}).click();await page.reload();
+  await page.getByRole('button',{name:'Suspendre le mouvement'}).last().click();await page.reload();
   check(await page.locator('html').getAttribute('data-motion')==='off','Préférence de mouvement persistante');
 
   for(const width of [320,390,768,1440]){

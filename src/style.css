@@ -62,3 +62,13 @@ dialog{color:var(--paper);background:#191c16;border:1px solid #777c65;padding:0;
 }
 @media(max-width:23em){.brand{gap:8px}.brand svg{width:28px}.brand>span{font-size:21px;letter-spacing:2px}.brand small{font-size:7px}.header-actions{gap:8px}.hero-copy{padding-top:72px}.hero h1{margin-top:34px}.hero h1 span{font-size:34px}.hero-copy .eyebrow{max-width:190px}.chamber-tabs button{font-size:19px;padding-right:6px}.chamber-tabs button small{font-size:.625rem}.fragment-row{gap:12px}.fragment-row>img{display:none}.fragment-open h3{font-size:27px}.map-field{height:455px}.star-node{width:112px}.star-node strong{font-size:21px}.map-center>span{font-size:13px}.closing>a{font-size:47px;gap:10px}.filter-note{font-size:.625rem}}
 
+/* Mineral palette: light is drawn by GLSL, never decorative CSS gradients. */
+:root{background:#101214;--paper:#e6e2d8;--muted:#b0b6b3;--copper:#ccb18a;--focus-ring:#f0d3a0}
+body{background:#101214}.site-header{background:#101214}.constellation{background:#10191d}.chamber-stage{background:#181d20}.hero-art>img{filter:saturate(.72) brightness(.77)}
+.portal-shader{position:absolute;inset:0;z-index:2;pointer-events:none}.portal-shader canvas{display:block;width:100%;height:100%}.hero-motion{position:absolute;left:4.5%;bottom:62px;z-index:5}.hero-motion .footer-motion{color:var(--muted);font-size:11px}
+.star-node.active .node-symbol{color:#bce1e5}.star-node.active strong{color:#e8e1d0}.map-lines{color:#84a8ac}.domain-detail{border-color:#78949855}.chamber-tabs button[aria-selected=true]{color:#e7d0ad}
+.hero-art.beyond>img.beyond-image{filter:saturate(.82) brightness(.85)}
+@media(max-width:767px){.hero-motion{left:6%;bottom:52px}.hero-motion .footer-motion{font-size:10px}}
+.hero-motion .footer-motion{min-height:44px;min-width:44px}.hero-motion{left:8%;bottom:72px}.veil-switch,.art-axis{z-index:3}header{background:#101214f5}
+@media(max-width:767px){.hero-motion{left:6%;bottom:92px}.hero-art>img{filter:saturate(.65) brightness(.48)}.hero-art.beyond>img.beyond-image{filter:saturate(.8) brightness(.52)}}
+.hero-motion .footer-motion{display:inline-flex;align-items:center;gap:8px}.hero-motion .state-icons{display:inline-grid}
