@@ -1,0 +1,21 @@
+import {chromium} from '@playwright/test';
+import {mkdir,writeFile} from 'node:fs/promises';
+import path from 'node:path';
+const output=process.env.UI_QA_DIR||'test-results/ui';
+await mkdir(output,{recursive:true});
+const browser=await chromium.launch({channel:'msedge',headless:true});
+const context=await browser.newContext({viewport:{width:1440,height:1000}}),page=await context.newPage();
+await page.goto(process.env.UI_TEST_URL||'http://127.0.0.1:5174/henosis/');
+await page.getByRole('tab',{name:'II La recherche'}).click();
+await page.locator('.chamber-stage').evaluate(stage=>stage.getAnimations({subtree:true}).forEach(animation=>animation.playbackRate=.1));
+await page.waitForTimeout(450);
+const intermediate=await page.locator('.chamber-picture img').evaluateAll(images=>images.map(image=>getComputedStyle(image).opacity));
+await page.screenshot({path:path.join(output,'henosis-ui-skills-transition.png')});
+await page.getByRole('tab',{name:'III Le devenir'}).click();await page.waitForTimeout(2500);
+const final=await page.locator('.chamber-picture img').evaluateAll(images=>images.map(image=>getComputedStyle(image).opacity));
+if(final.join(',')!=='0,0,1')throw Error('Interruption did not settle on the selected chamber');
+await page.locator('.fragment-open').first().click();await page.getByRole('button',{name:'Fermer le fragment'}).click();
+if(await page.locator('dialog[open]').count()!==0)throw Error('Reader close failed');
+await writeFile(path.join(output,'henosis-ui-skills-motion.json'),JSON.stringify({playbackRate:.1,intermediate,final,readerClose:'immediate native close'},null,2));
+console.log('Transition ralentie à 10 %, interruption et fermeture du lecteur vérifiées.');await browser.close();
+

@@ -33,3 +33,14 @@ Les illustrations de `public/art` sont issues des références fournies par Sami
 - Aucun outil de suivi, compte, formulaire ou serveur.
 
 Site : https://samirneo.github.io/henosis/
+
+## UI Skills
+
+L’interface a été affinée avec UI Skills : texte plus lisible, boutons mobiles de 44 px, menu natif, restauration du focus, transitions interruptibles et contrôle du rendu 3D hors écran. [Consignes et contrôles](docs/UI-SKILLS.md).
+
+```sh
+npm run ui:skills
+npm run check:ui
+```
+
+Les tests d’interface nécessitent le serveur local sur le port 5174 et un navigateur Playwright installé. Les variables de configuration sont détaillées dans la documentation.
