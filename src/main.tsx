@@ -7,7 +7,7 @@ const Orbital=lazy(()=>import('./Orbital'));
 const art=(name:string)=>`${import.meta.env.BASE_URL}art/${name}.webp`;
 function Sigil(){return <svg viewBox="0 0 100 100" fill="none" aria-hidden="true"><circle cx="50" cy="50" r="35"/><circle cx="50" cy="50" r="12"/><path d="M50 4v92M4 50h92M28 75V25l44 50V25"/></svg>}
 function App(){
- const [menu,setMenu]=useState(false),[filter,setFilter]=useState('Tout'),[domain,setDomain]=useState(0),[article,setArticle]=useState<number|null>(null),[search,setSearch]=useState(false),[query,setQuery]=useState(''),[still,setStill]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),[saved,setSaved]=useState<number[]>(()=>{try{return JSON.parse(localStorage.getItem('henosis-saved')||'[]')}catch{return []}});
+ const [beyond,setBeyond]=useState(false),[menu,setMenu]=useState(false),[filter,setFilter]=useState('Tout'),[domain,setDomain]=useState(0),[article,setArticle]=useState<number|null>(null),[search,setSearch]=useState(false),[query,setQuery]=useState(''),[still,setStill]=useState(()=>matchMedia('(prefers-reduced-motion: reduce)').matches),[saved,setSaved]=useState<number[]>(()=>{try{return JSON.parse(localStorage.getItem('henosis-saved')||'[]')}catch{return []}});
  const modal=useRef<HTMLDialogElement>(null),searchModal=useRef<HTMLDialogElement>(null);
  useEffect(()=>{document.documentElement.dataset.motion=still?'off':'on';},[still]);
  useEffect(()=>{const key=(e:KeyboardEvent)=>{if((e.metaKey||e.ctrlKey)&&e.key==='k'){e.preventDefault();setSearch(s=>!s);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[]);
@@ -23,7 +23,7 @@ function App(){
  <main>
  <section className="hero" aria-labelledby="hero-title">
  <div className="hero-copy"><div className="eyebrow"><span className="spark">✦</span> SAMIR, SOUS LE SIGNE D’HENOK</div><h1 id="hero-title">Un esprit.<br/>Plusieurs <em>mondes.</em></h1><p>Explorer ce qui échappe.<br/>Relier ce qui semble séparé.<br/>Donner forme à ce qui n’existe pas encore.</p><a className="round-link" href="#oeuvres"><span className="circle"><ArrowDown size={20}/></span>Entrer dans mon univers</a><div className="hero-coordinate"><span>01 — LE SEUIL</span><span>LA CURIOSITÉ COMME BOUSSOLE</span></div></div>
- <div className="hero-art"><img src={art('veil')} alt="Une figure ailée ouvre dans un paysage un passage vers les étoiles." fetchPriority="high"/><div className="art-outline"/><span className="art-axis axis-top">AU-DELÀ DU VISIBLE</span><span className="art-axis axis-side">FIG. 001 / LE PASSAGE</span><div className="art-caption"><span>Entre le réel<br/><i>et le possible.</i></span><Sigil/></div></div>
+ <div className={`hero-art ${beyond?'beyond':''}`}><button className="veil-switch" onClick={()=>setBeyond(!beyond)} aria-pressed={beyond}>{beyond?'Revenir au seuil':'Traverser le voile'} <ArrowUpRight size={13}/></button><img src={art('veil')} alt="Une figure ailée ouvre dans un paysage un passage vers les étoiles." fetchPriority="high"/><img className="beyond-image" src={art('becoming')} alt="Une figure lumineuse aux multiples bras incarne les possibles." aria-hidden={!beyond}/><div className="art-outline"/><span className="art-axis axis-top">AU-DELÀ DU VISIBLE</span><span className="art-axis axis-side">FIG. 001 / LE PASSAGE</span><div className="art-caption"><span>Entre le réel<br/><i>et le possible.</i></span><Sigil/></div></div>
  <div className="vertical-note">EST. 2026 — EN MOUVEMENT PERPÉTUEL</div>
  </section>
  <div className="discipline-band" aria-label="Domaines d’intérêt"><span>TECHNOLOGIE</span><b>✦</b><span>CONSCIENCE</span><b>✦</b><span>CRÉATION</span><b>✦</b><span>SOUVERAINETÉ</span><b>✦</b><span>IMAGINAIRE</span></div>
@@ -41,3 +41,5 @@ function App(){
  </>;
 }
 createRoot(document.getElementById('root')!).render(<React.StrictMode><App/></React.StrictMode>);
+
+
