@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-export default function Orbital({still}:{still:boolean}) {
+export default function Orbital({still,focus=0}:{still:boolean,focus?:number}) {
  const mount=useRef<HTMLDivElement>(null);
+ const selected=useRef(focus);
+ useEffect(()=>{selected.current=focus},[focus]);
  useEffect(()=>{
   const el=mount.current!; let renderer:THREE.WebGLRenderer;
   try{renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});}catch{return;}
@@ -14,11 +16,12 @@ export default function Orbital({still}:{still:boolean}) {
   const dots=[];for(let i=0;i<160;i++){const t=i*2.39996;const y=1-i/80;const r=Math.sqrt(1-y*y);dots.push(Math.cos(t)*r*2.2,y*2.2,Math.sin(t)*r*2.2);}
   const stars=new THREE.Points(new THREE.BufferGeometry().setAttribute('position',new THREE.Float32BufferAttribute(dots,3)),new THREE.PointsMaterial({color:0xd5c6a7,size:.021}));group.add(stars);
   let frame=0,visible=true;const pointer={x:0,y:0};
-  const move=(e:PointerEvent)=>{const b=el.getBoundingClientRect();pointer.x=(e.clientX-b.left)/b.width-.5;pointer.y=(e.clientY-b.top)/b.height-.5;};el.addEventListener('pointermove',move);
+  const surface=el.parentElement!;
+  const move=(e:PointerEvent)=>{const b=surface.getBoundingClientRect();pointer.x=(e.clientX-b.left)/b.width-.5;pointer.y=(e.clientY-b.top)/b.height-.5;};surface.addEventListener('pointermove',move);
   const resize=()=>{const {width,height}=el.getBoundingClientRect();renderer.setSize(width,height);camera.aspect=width/height;camera.updateProjectionMatrix();renderer.render(scene,camera);};const ro=new ResizeObserver(resize);ro.observe(el);
   const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;});io.observe(el);
-  const draw=(t:number)=>{if(visible&&!document.hidden){group.rotation.y=still?.3:t*.000075+pointer.x*.15;group.rotation.x=still?.2:.2+pointer.y*.12;renderer.render(scene,camera);}if(!still)frame=requestAnimationFrame(draw);};frame=requestAnimationFrame(draw);
-  return()=>{cancelAnimationFrame(frame);ro.disconnect();io.disconnect();el.removeEventListener('pointermove',move);scene.traverse(obj=>{if(obj instanceof THREE.Line||obj instanceof THREE.Points){obj.geometry.dispose();const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(m=>m.dispose());}});geo.dispose();renderer.dispose();el.replaceChildren();};
+  const draw=(t:number)=>{if(visible&&!document.hidden){group.rotation.y=still?.3:t*.000075+pointer.x*.3;group.rotation.x=still?.2:.2+pointer.y*.2;group.rotation.z+=(selected.current*.35-group.rotation.z)*.035;renderer.render(scene,camera);}if(!still)frame=requestAnimationFrame(draw);};frame=requestAnimationFrame(draw);
+  return()=>{cancelAnimationFrame(frame);ro.disconnect();io.disconnect();surface.removeEventListener('pointermove',move);scene.traverse(obj=>{if(obj instanceof THREE.Line||obj instanceof THREE.Points){obj.geometry.dispose();const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(m=>m.dispose());}});geo.dispose();renderer.dispose();el.replaceChildren();};
  },[still]);
  return <div className="orbital" ref={mount} aria-hidden="true"/>;
 }
