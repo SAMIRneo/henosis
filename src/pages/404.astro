@@ -1,0 +1,5 @@
+---
+import Layout from '../layouts/Layout.astro';
+import {href} from '../lib/site';
+---
+<Layout title="Page introuvable" description="Ce lien ne mène à aucun fragment de HENOSIS."><div class="page-heading"><span class="eyebrow">404 / lien interrompu</span><h1>Ce fragment<br/>manque.</h1><p>Cette adresse ne correspond à aucune page.</p><a class="primary-link" href={href('constellation')}>Reprendre par les relations <span aria-hidden="true">↗</span></a></div><div class="content-shell"><a class="underlined" href={href('lecture')}>Lire le contenu complet</a></div></Layout>

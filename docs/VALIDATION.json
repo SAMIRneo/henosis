@@ -1,0 +1,117 @@
+{
+  "date": "2026-10-11",
+  "astroCheck": {
+    "errors": 0,
+    "warnings": 0,
+    "hints": 0
+  },
+  "playwright": {
+    "startTime": "2026-10-11T09:48:30.159Z",
+    "duration": 50844.325,
+    "expected": 32,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "lighthouse": [
+    {
+      "path": "/henosis/",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1806,
+      "cls": 0.0001056428499025813,
+      "tbtMs": 94,
+      "source": "lhr-1791711680979.json"
+    },
+    {
+      "path": "/henosis/chambres/machines/",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1808,
+      "cls": 0.001147038649004014,
+      "tbtMs": 0,
+      "source": "lhr-1791711697044.json"
+    },
+    {
+      "path": "/henosis/fragments/deleguer/",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1806,
+      "cls": 0.0002587034968084782,
+      "tbtMs": 0,
+      "source": "lhr-1791711712171.json"
+    },
+    {
+      "path": "/henosis/oeuvres/",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1960,
+      "cls": 0.0000111874603687456,
+      "tbtMs": 0,
+      "source": "lhr-1791711727392.json"
+    },
+    {
+      "path": "/henosis/lecture/",
+      "scores": {
+        "performance": 99,
+        "accessibility": 100,
+        "best-practices": 100,
+        "seo": 100
+      },
+      "lcpMs": 1962,
+      "cls": 0.0000111874603687456,
+      "tbtMs": 0,
+      "source": "lhr-1791711742596.json"
+    }
+  ],
+  "budget": {
+    "criticalGzip": 7799,
+    "budget": 100000,
+    "pass": true,
+    "criticalFiles": [
+      {
+        "file": "_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js",
+        "bytes": 15983,
+        "gzip": 5511
+      },
+      {
+        "file": "_astro/Layout.astro_astro_type_script_index_0_lang.DCYKRzic.js",
+        "bytes": 5701,
+        "gzip": 2288
+      }
+    ],
+    "deferredGPU": [
+      {
+        "file": "gpu.CQCvogsI.js",
+        "gzip": 241879
+      }
+    ]
+  },
+  "interactions": {
+    "maxInteractionMs": 56,
+    "note": "Chromium mobile 390px, CPU ×4; Event Timing, interactions de test, pas de données terrain"
+  },
+  "content": {
+    "chambres": 6,
+    "fragments": 6,
+    "relations": 9,
+    "oeuvres": 1,
+    "questionsToWrite": 8
+  }
+}

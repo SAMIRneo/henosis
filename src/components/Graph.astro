@@ -1,0 +1,20 @@
+---
+import type {Graph} from '../lib/graph';
+interface Props {graph:Graph}
+const {graph}=Astro.props;
+const find=(id:string)=>graph.nodes.find(n=>n.id===id)!;
+---
+<div class="graph-composition" data-graph>
+ <div class="graph-map">
+  <svg viewBox="0 0 1000 700" role="group" aria-labelledby="graph-title"><title id="graph-title">Relations entre les fragments. La liste ci-dessous donne tous les liens et leurs raisons.</title>
+   <ellipse class="graph-orbit" cx="500" cy="350" rx="440" ry="290"/>
+   {graph.links.map(link=><line data-edge={link.id} data-source={link.source} data-target={link.target} x1={find(link.source).x} y1={find(link.source).y} x2={find(link.target).x} y2={find(link.target).y}><title>{link.why}</title></line>)}
+   {graph.nodes.map((node,i)=><a href={node.url} class="graph-node" data-node={node.id} aria-label={`Fragment ${String(i+1).padStart(2,'0')} : ${node.title}`}><circle cx={node.x} cy={node.y} r="70" fill="transparent" aria-hidden="true"/><path transform={`translate(${node.x} ${node.y})`} d="M0 -17L12 0L0 17L-12 0Z"/><text x={node.x+22} y={node.y+5}>{String(i+1).padStart(2,'0')}</text></a>)}
+  </svg>
+  <span class="graph-coordinate" aria-hidden="true">Le multiple relié / ἕνωσις</span>
+ </div>
+ <div class="graph-detail"><span class="eyebrow">Relation / motif</span><p class="graph-selection" data-selection>Choisir un fragment.</p><p class="graph-help">Au survol ou au focus, ses relations apparaissent ici. Sur écran tactile, les boutons de la liste permettent de les lire avant d’ouvrir la note.</p><div data-reasons aria-live="polite" aria-atomic="true"></div></div>
+</div>
+<section class="graph-equivalent" aria-labelledby="relation-heading"><div class="section-rule"><span class="eyebrow">Le graphe en mots</span><h2 id="relation-heading">Un lien a une raison.</h2></div>
+ <ol class="relation-list">{graph.nodes.map((node,i)=><li data-row={node.id}><div class="relation-heading"><span class="index">{String(i+1).padStart(2,'0')}</span><a href={node.url}>{node.title}</a><button class="relation-select" data-select={node.id} aria-label={`Relier : ${node.title}`} aria-pressed="false" hidden>Relier</button></div><ul>{graph.links.filter(l=>l.source===node.id||l.target===node.id).map(link=>{const other=find(link.source===node.id?link.target:link.source);return <li><a href={other.url}>{other.title}</a><p>{link.why}</p></li>})}</ul></li>)}</ol>
+</section>

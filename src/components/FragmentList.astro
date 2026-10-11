@@ -1,0 +1,7 @@
+---
+import type {CollectionEntry} from 'astro:content';
+import {href,dateLabel} from '../lib/site';
+interface Props {fragments:CollectionEntry<'fragments'>[]}
+const {fragments}=Astro.props;
+---
+<ol class="fragment-list">{fragments.map((fragment,i)=><li><span class="index">{String(i+1).padStart(2,'0')}</span><div><a class="fragment-title" href={href(`fragments/${fragment.id}`)}>{fragment.data.title}</a><p>{fragment.data.question}</p><div class="fragment-meta"><time datetime={fragment.data.date.toISOString()}>{dateLabel(fragment.data.date)}</time><span>{fragment.data.status==='publie'?'Publié':'Note à écrire · date de préparation'}</span></div></div><a class="open-note" href={href(`fragments/${fragment.id}`)} aria-label={`Lire : ${fragment.data.title}`}>Lire</a></li>)}</ol>

@@ -1,0 +1,4 @@
+import type {APIRoute} from 'astro';
+import {getCollection} from 'astro:content';
+import {origin,href,xml} from '../lib/site';
+export const GET:APIRoute=async()=>{const notes=(await getCollection('fragments')).filter(n=>n.data.status==='publie').sort((a,b)=>b.data.date.getTime()-a.data.date.getTime());return new Response(`<?xml version="1.0" encoding="utf-8"?><rss version="2.0"><channel><title>HENOSIS · Fragments</title><link>${origin+href()}</link><description>Les notes publiées de Samir / HENOK. Les notes à écrire sont exclues.</description><language>fr</language>${notes.map(n=>`<item><title>${xml(n.data.title)}</title><link>${origin+href('fragments/'+n.id)}</link><guid>${origin+href('fragments/'+n.id)}</guid><pubDate>${n.data.date.toUTCString()}</pubDate><description>${xml(n.body??n.data.question)}</description></item>`).join('')}</channel></rss>`,{headers:{'Content-Type':'application/rss+xml; charset=utf-8'}})};

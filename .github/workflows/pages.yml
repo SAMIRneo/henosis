@@ -17,14 +17,18 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run build
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - run: npm run check
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+      - uses: withastro/action@v5
         with:
-          path: dist
+          node-version: 24
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+      - run: npm run budget
   deploy:
     environment:
       name: github-pages

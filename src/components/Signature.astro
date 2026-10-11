@@ -1,0 +1,18 @@
+---
+import type {Graph} from '../lib/graph';
+import {thesis} from '../lib/site';
+interface Props {graph:Graph}
+const {graph}=Astro.props;
+const n=graph.nodes.length;
+const point=(a:number)=>`${500+Math.cos(a)*112},${350+Math.sin(a)*268}`;
+---
+<div class="signature" data-signature>
+ <svg viewBox="0 0 1000 700" role="img" aria-labelledby="signature-title">
+  <title id="signature-title">Les {n} fragments réunis en une forme. Chaque segment représente une note.</title>
+  <path class="signature-axis" d="M500 30V670M300 350H700"/>
+  {graph.nodes.map((node,i)=><g class="shard" data-index={i}><polygon points={`500,350 ${point(i/n*Math.PI*2-Math.PI/2)} ${point((i+1)/n*Math.PI*2-Math.PI/2)}`}/><text x={i<n/2?650:300} text-anchor={i<n/2?'start':'end'} y={130+i*76}>{String(i+1).padStart(2,'0')} / {node.chambres[0]}</text></g>)}
+  <ellipse class="signature-orbit" cx="500" cy="350" rx="173" ry="292"/>
+ </svg>
+ <div class="signature-caption"><span data-phase>Les fragments font une forme.</span><span>{n} fragments / un seul champ</span></div>
+ <p class="todo signature-thesis" data-entry-thesis>{thesis}</p>
+</div>

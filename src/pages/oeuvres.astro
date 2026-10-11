@@ -1,0 +1,6 @@
+---
+import {getCollection,render} from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+const works=await Promise.all((await getCollection('oeuvres')).map(async work=>({...work,...await render(work)})));
+---
+<Layout title="Œuvres" description="Le Codex MONO. Une œuvre publique, avec son lien et sa preuve."><div class="page-heading"><span class="eyebrow">Le travail rendu visible</span><h1>Ce qui existe.</h1><p>Une œuvre doit pouvoir être examinée.<br/>Je présente ici un travail publié.</p></div><div class="content-shell">{works.map(({data,Content})=><article class="work"><span class="eyebrow">{data.kind} / vérifié</span><div><h2>{data.title}</h2><div class="prose"><Content/></div><p class="proof">{data.proof}</p><a class="work-link" href={data.url}>Ouvrir {data.title} <span aria-hidden="true">↗</span></a></div></article>)}<p class="empty-note">Les arènes 3D et le travail sur Hermes / Brain OS restent hors de cette liste tant qu’une démonstration et mon rôle ne sont pas confirmés.</p></div></Layout>

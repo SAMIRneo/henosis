@@ -1,0 +1,16 @@
+---
+import {getCollection,render} from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FragmentList from '../../components/FragmentList.astro';
+import {href} from '../../lib/site';
+export async function getStaticPaths(){return (await getCollection('chambres')).map(room=>({params:{slug:room.id},props:{room}}))}
+const {room}=Astro.props;
+const {Content}=await render(room);
+const fragments=(await getCollection('fragments')).filter(f=>f.data.chambres.includes(room.id));
+const rooms=(await getCollection('chambres')).sort((a,b)=>a.data.number-b.data.number);
+---
+<Layout title={room.data.title} description={room.data.description}>
+ <div class="page-heading"><a class="back-link" href={href()}>HENOSIS / chambres</a><p class="eyebrow">Chambre 0{room.data.number} / {room.data.tension}</p><h1>{room.data.title}</h1><p>{room.data.question}</p></div>
+ <div class="content-shell"><p class="room-tension">{room.data.tension}</p><article class="prose"><Content/></article><nav class="room-navigation" aria-label="Autres chambres">{rooms.map(c=><a href={href(`chambres/${c.id}`)} aria-current={c.id===room.id?'page':undefined}>{c.data.title}</a>)}</nav></div>
+ <section class="room-fragments"><span class="eyebrow">Les notes de cette chambre</span><h2>Des questions en travail.</h2><FragmentList fragments={fragments}/><a class="underlined" href={href('constellation')}>Voir les relations entre les notes</a></section>
+</Layout>

@@ -1,0 +1,7 @@
+---
+import {getCollection} from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import FragmentList from '../../components/FragmentList.astro';
+const fragments=(await getCollection('fragments')).sort((a,b)=>b.data.date.getTime()-a.data.date.getTime()||a.id.localeCompare(b.id));
+---
+<Layout title="Fragments" description="Notes courtes, datées et reliées. Les premières notes attendent le texte de Samir."><div class="page-heading"><span class="eyebrow">Le multiple / notes de travail</span><h1>Une question.<br/><em>Un fragment.</em></h1><p>Les notes initiales sont des emplacements à écrire.<br/>Leur date indique leur préparation, pas une publication.</p></div><div class="content-shell"><FragmentList fragments={fragments}/></div></Layout>

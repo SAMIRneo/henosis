@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Graph from '../components/Graph.astro';
+import {buildGraph} from '../lib/graph';
+const graph=await buildGraph();
+---
+<Layout title="Constellation" description="Chaque fragment est un nœud. Chaque lien donne la raison d’une relation." mode="graph"><div class="page-heading graph-heading"><span class="eyebrow">03 / le multiple relié</span><h1>Aucune idée<br/><em>ne tient seule.</em></h1><p>Chaque point est une note. Chaque trait porte une raison.<br/>Les notes initiales attendent encore mon texte.</p></div><Graph graph={graph}/><script id="graph-data" type="application/json" set:html={JSON.stringify(graph).replace(/</g,'\\u003c')}/></Layout>

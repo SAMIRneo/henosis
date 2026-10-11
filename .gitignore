@@ -6,3 +6,9 @@ playwright-report/
 prepare-assets.mjs
 qa.mjs
 verify.mjs
+
+.astro/
+.lighthouseci/
+.env*
+
+work/qa/

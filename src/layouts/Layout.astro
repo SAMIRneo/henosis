@@ -1,0 +1,41 @@
+---
+import {ClientRouter} from 'astro:transitions';
+import {href,origin} from '../lib/site';
+import '../styles/global.css';
+import serif from '../assets/fonts/newsreader-fr-normal.woff2?url';
+import italic from '../assets/fonts/newsreader-fr-italic.woff2?url';
+interface Props {title:string;description:string;mode?:'entry'|'graph'|'reading'|'content'}
+const {title,description,mode='content'}=Astro.props;
+const canonical=new URL(Astro.url.pathname,origin).href;
+const links=[['constellation','Constellation'],['fragments','Fragments'],['oeuvres','Œuvres'],['a-propos','Samir']];
+---
+<!doctype html>
+<html lang="fr" data-mode={mode}>
+ <head>
+  <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>{title==='HENOSIS'?'HENOSIS · Samir / HENOK':`${title} · HENOSIS`}</title>
+  <meta name="description" content={description}/><meta name="theme-color" content="#111210"/>
+  <link rel="canonical" href={canonical}/><link rel="icon" href={href('sigil.svg')} type="image/svg+xml"/>
+  <link rel="preload" href={serif} as="font" type="font/woff2" crossorigin/>
+  <link rel="preload" href={italic} as="font" type="font/woff2" crossorigin/>
+  <link rel="alternate" type="application/rss+xml" title="Fragments de HENOSIS" href={href('rss.xml')}/>
+  <meta property="og:type" content="website"/><meta property="og:locale" content="fr_FR"/><meta property="og:site_name" content="HENOSIS"/>
+  <meta property="og:title" content={`${title} · Samir / HENOK`}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/>
+  <meta property="og:image" content={`${origin}${href('art/veil.webp')}`}/><meta property="og:image:alt" content="Le voile, référence visuelle de HENOSIS"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <script type="application/ld+json" set:html={JSON.stringify({'@context':'https://schema.org','@type':'Person',name:'Samir',alternateName:'HENOK',url:origin+href(),description:'Autodidacte, polymathe. Je construis en apprenant.'})}/>
+  <ClientRouter fallback="swap" />
+ </head>
+ <body>
+  <a class="skip" href="#contenu">Aller au contenu</a>
+  <div id="persistent-surface" transition:persist="henosis-surface" aria-hidden="true"><canvas id="henosis-canvas"></canvas></div>
+  <header class="site-header">
+   <a class="wordmark" href={href()}>HENOSIS<span>Samir / HENOK</span></a>
+   <nav aria-label="Navigation principale">{links.map(([path,label])=><a href={href(path)} aria-current={Astro.url.pathname===href(path)?'page':undefined}>{label}</a>)}</nav>
+   <a class="reading-link" href={href('lecture')}>Lecture simple</a>
+  </header>
+  <main id="contenu" tabindex="-1"><slot/></main>
+  <footer class="site-footer"><a href={href()}>ἕνωσις <span>Unification.</span></a><div><a href={href('lecture')}>Lecture simple</a><a href={href('rss.xml')}>RSS</a><a href={href('llms.txt')}>Pour les agents</a><button id="motion-toggle" hidden aria-pressed="false">Suspendre le mouvement</button></div><span class="footer-sign">Samir / HENOK</span></footer>
+  <script>import '../scripts/client';</script>
+ </body>
+</html>

@@ -1,0 +1,16 @@
+---
+import {getCollection,render} from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import {href,dateLabel} from '../../lib/site';
+import {buildGraph} from '../../lib/graph';
+export async function getStaticPaths(){return (await getCollection('fragments')).map(fragment=>({params:{slug:fragment.id},props:{fragment}}))}
+const {fragment}=Astro.props;
+const {Content}=await render(fragment);
+const graph=await buildGraph();
+const relations=graph.links.filter(l=>l.source===fragment.id||l.target===fragment.id);
+const rooms=await getCollection('chambres');
+---
+<Layout title={fragment.data.title} description={fragment.data.question}>
+ <div class="page-heading"><a class="back-link" href={href('fragments')}>Tous les fragments</a><p class="eyebrow">{fragment.data.status==='publie'?'Fragment publié':'Fragment à écrire'}</p><h1>{fragment.data.title}</h1><p>{fragment.data.question}</p></div>
+ <div class="content-shell"><p class="notation"><time datetime={fragment.data.date.toISOString()}>{dateLabel(fragment.data.date)}</time>{fragment.data.status==='a-ecrire'?' · Date de préparation éditoriale':''}</p><article class="prose"><Content/></article><nav class="room-navigation" aria-label="Chambres de ce fragment">{fragment.data.chambres.map(slug=><a href={href(`chambres/${slug}`)}>{rooms.find(c=>c.id===slug)?.data.title}</a>)}</nav><section class="relations-section"><span class="eyebrow">Le lien explicité</span><h2>Ce fragment en appelle d’autres.</h2><ul>{relations.map(link=>{const other=graph.nodes.find(n=>n.id===(link.source===fragment.id?link.target:link.source))!;return <li><a href={other.url}>{other.title}</a><p>{link.why}</p></li>})}</ul></section><nav class="room-navigation" aria-label="Lecture du fragment"><a href={href('constellation')}>Replacer dans la constellation</a><a href={href('lecture')+'#'+fragment.id}>Lire sans 3D</a></nav></div>
+</Layout>

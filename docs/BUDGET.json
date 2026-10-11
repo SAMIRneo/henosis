@@ -1,0 +1,23 @@
+{
+  "criticalGzip": 7799,
+  "budget": 100000,
+  "pass": true,
+  "criticalFiles": [
+    {
+      "file": "_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js",
+      "bytes": 15983,
+      "gzip": 5511
+    },
+    {
+      "file": "_astro/Layout.astro_astro_type_script_index_0_lang.DCYKRzic.js",
+      "bytes": 5701,
+      "gzip": 2288
+    }
+  ],
+  "deferredGPU": [
+    {
+      "file": "gpu.CQCvogsI.js",
+      "gzip": 241879
+    }
+  ]
+}

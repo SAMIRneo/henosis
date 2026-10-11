@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Signature from '../components/Signature.astro';
+import {buildGraph} from '../lib/graph';
+import {getCollection} from 'astro:content';
+import {href,thesis} from '../lib/site';
+const graph=await buildGraph();
+const chambres=(await getCollection('chambres')).sort((a,b)=>a.data.number-b.data.number);
+---
+<Layout title="HENOSIS" description="Samir / HENOK. Je construis en apprenant. Des fragments, une forme, des relations." mode="entry">
+ <section class="entry" aria-labelledby="entry-title"><div class="entry-copy"><p class="eyebrow">ἕνωσις / le retour à l’Un</p><h1 id="entry-title">Le multiple.<br/><em>Une forme.</em></h1><p class="entry-fact">Je suis Samir. HENOK est mon alias.<br/>J’ai 22 ans. Je construis en apprenant.</p><a class="primary-link" href={href('constellation')}>Déployer les relations <span aria-hidden="true">↗</span></a><p class="entry-method">Les éclats sont mes fragments.<br/>Leurs liens ont une raison.</p></div><Signature graph={graph}/><div class="entry-foot"><span>01 / dispersion</span><span>02 / unité</span><span>03 / relations</span></div></section>
+ <section class="thesis-section"><span class="eyebrow">La phrase qui reste à poser</span><h2>Ce qui tient<br/>l’ensemble.</h2><p class="todo thesis" data-thesis>{thesis}</p><a href={href('a-propos')} class="underlined">Le nom et la méthode</a></section>
+ <section class="chamber-index"><div class="section-rule"><span class="eyebrow">Six tensions / un même travail</span><h2>Entrer par une question.</h2></div>{chambres.map(room=><a class="chamber-line" href={href(`chambres/${room.id}`)}><span class="index">0{room.data.number}</span><h3>{room.data.title}</h3><span class="chamber-tension">{room.data.tension}</span><span aria-hidden="true">↗</span></a>)}</section>
+ <script id="graph-data" type="application/json" set:html={JSON.stringify(graph).replace(/</g,'\\u003c')}/>
+</Layout>
